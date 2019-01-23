@@ -357,8 +357,8 @@ if __name__ == '__main__':
 
     # game = 'RoboschoolAnt-v1'
     # game = 'RoboschoolWalker2d-v1'
-    game = 'RoboschoolHalfCheetah-v1'
-    # game = 'RoboschoolHopper-v1'
+    # game = 'RoboschoolHalfCheetah-v1'
+    game = 'RoboschoolHopper-v1'
     # game = 'RoboschoolHumanoid-v1'
     # game = 'RoboschoolHumanoidFlagrun-v1'
     # game = 'RoboschoolReacher-v1'
@@ -374,7 +374,7 @@ if __name__ == '__main__':
     # naive_model_ddpg(game, depth=2)
     # plan_ddpg(game, depth=2, on_policy=True)
     # ddpg_shared(game)
-    # ddpg_continuous(game)
+    ddpg_continuous(game)
 
     # parallel = True
     # multi_runs(game, plan_ddpg, tag='d3n5', parallel=parallel,
