@@ -9,26 +9,27 @@ def parse_arguments():
     )
     parser.add_argument(
         '--trainout',
-        type='str',
+        type=str,
         default='01_train',
-        help='TODO'
+        help='TODO1'
     )
     parser.add_argument(
         '--evalout',
-        type='str',
+        type=str,
         default='01_eval',
-        help='TODO'
+        help='TODO2'
     )
     parser.add_argument(
         '--game',
-        type='str',
+        type=str,
         default='Hopper',
-        help='TODO'
+        help='TODO3'
     )
     return parser.parse_args()
 
 
 def ddpg_continuous(game, log_dir=None, **kwargs):
+
     config = Config()
     kwargs.setdefault('gate', F.tanh)
     kwargs.setdefault('tag', ddpg_continuous.__name__)
@@ -73,7 +74,7 @@ def ddpg_continuous(game, log_dir=None, **kwargs):
         "rewards": rewards,
         "avg_test_rewards": avg_test_rewards
     }
-    with open("02_train.json", 'w') as outfile:
+    with open("03_train.json", 'w') as outfile:
         json.dump(to_json, outfile)
 
 
@@ -397,11 +398,12 @@ if __name__ == '__main__':
     # game = 'RoboschoolAnt-v1'
     # game = 'RoboschoolWalker2d-v1'
     # game = 'RoboschoolHalfCheetah-v1'
-    game = 'RoboschoolHopper-v1'
+    # game = 'RoboschoolHopper-v1'
     # game = 'RoboschoolHumanoid-v1'
     # game = 'RoboschoolHumanoidFlagrun-v1'
     # game = 'RoboschoolReacher-v1'
     # game = 'RoboschoolHumanoidFlagrunHarder-v1'
+    game = 'Roboschool' + args.game + '-v1'
 
     # visualize_diversity(game)
 
