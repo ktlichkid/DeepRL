@@ -58,8 +58,11 @@ class BaseAgent:
         rewards = []
         for ep in range(self.config.evaluation_episodes):
             rewards.append(self.deterministic_episode())
-        self.config.logger.info('evaluation episode return: %f(%f)' % (
+        self.config.logger.info('global step: %d, evaluation episode return: %f(%f)' % (self.total_steps,
             np.mean(rewards), np.std(rewards) / np.sqrt(len(rewards))))
+        with open("01_evaluation", 'a+') as f:
+            f.write(str(self.total_steps) + ' ' + str(np.mean(rewards)) + '\n')
+
 
     def evaluate(self, steps=1):
         config = self.config

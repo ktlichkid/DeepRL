@@ -28,6 +28,7 @@ def run_episodes(agent):
     ep = 0
     rewards = []
     steps = []
+    global_steps = []
     avg_test_rewards = []
     agent_type = agent.__class__.__name__
     while True:
@@ -35,6 +36,7 @@ def run_episodes(agent):
         reward, step = agent.episode()
         rewards.append(reward)
         steps.append(step)
+        global_steps.append(agent.total_steps)
         avg_reward = np.mean(rewards[-window_size:])
         config.logger.info('episode %d, reward %f, avg reward %f, total steps %d, episode step %d' % (
             ep, reward, avg_reward, agent.total_steps, step))
@@ -52,7 +54,7 @@ def run_episodes(agent):
             break
 
     agent.close()
-    return steps, rewards, avg_test_rewards
+    return steps, global_steps, rewards, avg_test_rewards
 
 def run_iterations(agent):
     random_seed()

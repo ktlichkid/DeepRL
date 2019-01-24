@@ -1,5 +1,17 @@
 from deep_rl import *
 import json
+# import argparse
+#
+# parser = argparse.ArgumentParser(
+#     description='Training script for object pose detection'
+# )
+# parser.add_argument(
+#     '--filename',
+#     type=str,
+#     default='01',
+#     help='experiment name'
+# )
+# filename = parser.parse_args().filename
 
 def ddpg_continuous(game, log_dir=None, **kwargs):
     config = Config()
@@ -32,19 +44,21 @@ def ddpg_continuous(game, log_dir=None, **kwargs):
     config.discount = 0.99
     config.reward_normalizer = RescaleNormalizer(kwargs['reward_scale'])
     config.random_process_fn = lambda action_dim: config.noise(size=(action_dim, ), std=config.std)
-    config.max_steps = 1e4#1e6
+    config.max_steps = 1e6
     config.evaluation_episodes_interval = int(1e4)
     config.evaluation_episodes = 20
     config.min_memory_size = 64
     config.target_network_mix = 1e-3
     config.logger = get_logger()
-    steps, rewards, avg_test_rewards = run_episodes(DDPGAgent(config))
+
+    steps, global_steps, rewards, avg_test_rewards = run_episodes(DDPGAgent(config))
     to_json = {
         "steps": steps,
+        "global_steps": global_steps,
         "rewards": rewards,
         "avg_test_rewards": avg_test_rewards
     }
-    with open('data.json', 'w') as outfile:
+    with open("01_train.json", 'w') as outfile:
         json.dump(to_json, outfile)
 
 
