@@ -58,7 +58,7 @@ def ddpg_continuous(game, log_dir=None, **kwargs):
         "rewards": rewards,
         "avg_test_rewards": avg_test_rewards
     }
-    with open("01_train.json", 'w') as outfile:
+    with open("02_train.json", 'w') as outfile:
         json.dump(to_json, outfile)
 
 
