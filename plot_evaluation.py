@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 steps = []
 rewards = []
 
-with open("01_evaluation", 'r') as f:
+with open("03_evaluation", 'r') as f:
     for line in f:
         s,r = line.split(' ')
         step = int(s)

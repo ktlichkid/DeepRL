@@ -10,13 +10,13 @@ def parse_arguments():
     parser.add_argument(
         '--trainout',
         type=str,
-        default='01_train',
+        default='04_train',
         help='TODO1'
     )
     parser.add_argument(
         '--evalout',
         type=str,
-        default='01_eval',
+        default='04_eval',
         help='TODO2'
     )
     parser.add_argument(
@@ -68,13 +68,14 @@ def ddpg_continuous(game, log_dir=None, **kwargs):
     config.logger = get_logger()
 
     steps, global_steps, rewards, avg_test_rewards = run_episodes(DDPGAgent(config))
+    json_file_name = args.trainout + '.json'
     to_json = {
         "steps": steps,
         "global_steps": global_steps,
         "rewards": rewards,
         "avg_test_rewards": avg_test_rewards
     }
-    with open("03_train.json", 'w') as outfile:
+    with open(json_file_name, 'w') as outfile:
         json.dump(to_json, outfile)
 
 
