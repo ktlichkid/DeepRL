@@ -1,17 +1,32 @@
 from deep_rl import *
 import json
-# import argparse
-#
-# parser = argparse.ArgumentParser(
-#     description='Training script for object pose detection'
-# )
-# parser.add_argument(
-#     '--filename',
-#     type=str,
-#     default='01',
-#     help='experiment name'
-# )
-# filename = parser.parse_args().filename
+import argparse
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(
+        description='Training script for object pose detection'
+    )
+    parser.add_argument(
+        '--trainout',
+        type='str',
+        default='01_train',
+        help='TODO'
+    )
+    parser.add_argument(
+        '--evalout',
+        type='str',
+        default='01_eval',
+        help='TODO'
+    )
+    parser.add_argument(
+        '--game',
+        type='str',
+        default='Hopper',
+        help='TODO'
+    )
+    return parser.parse_args()
+
 
 def ddpg_continuous(game, log_dir=None, **kwargs):
     config = Config()
@@ -369,6 +384,7 @@ def batch_job():
     # tasks[cf.ind2]()
 
 if __name__ == '__main__':
+    args = parse_arguments()
     mkdir('data')
     mkdir('data/video')
     mkdir('dataset')
