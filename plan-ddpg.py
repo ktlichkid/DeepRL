@@ -3,34 +3,44 @@ import json
 import argparse
 
 
-def parse_arguments():
-    parser = argparse.ArgumentParser(
-        description='Training script for object pose detection'
-    )
-    parser.add_argument(
-        '--trainout',
-        type=str,
-        default='04_train',
-        help='TODO1'
-    )
-    parser.add_argument(
-        '--evalout',
-        type=str,
-        default='04_eval',
-        help='TODO2'
-    )
-    parser.add_argument(
-        '--game',
-        type=str,
-        default='Hopper',
-        help='TODO3'
-    )
-    return parser.parse_args()
+# def parse_arguments():
+#     parser = argparse.ArgumentParser(
+#         description='Training script for object pose detection'
+#     )
+#     parser.add_argument(
+#         '--game',
+#         type=str,
+#         default='Hopper',
+#         help='TODO3'
+#     )
+#     return parser.parse_args()
 
 
 def ddpg_continuous(game, log_dir=None, **kwargs):
 
     config = Config()
+    config.add_argument(
+        '--game',
+        type=str,
+        default='Hopper',
+        help='TODO3'
+    )
+    config.add_argument(
+        '--evalout',
+        type=str,
+        default='06_evaluation',
+        help='TODO2'
+    )
+    config.add_argument(
+        '--trainout',
+        type=str,
+        default='06_train',
+        help='TODO1'
+    )
+    config.merge()
+    game = 'Roboschool' + config.game + '-v1'
+    print(game)
+
     kwargs.setdefault('gate', F.tanh)
     kwargs.setdefault('tag', ddpg_continuous.__name__)
     kwargs.setdefault('q_l2_weight', 0)
@@ -68,7 +78,7 @@ def ddpg_continuous(game, log_dir=None, **kwargs):
     config.logger = get_logger()
 
     steps, global_steps, rewards, avg_test_rewards = run_episodes(DDPGAgent(config))
-    json_file_name = args.trainout + '.json'
+    json_file_name = config.trainout + '.json'
     to_json = {
         "steps": steps,
         "global_steps": global_steps,
@@ -386,7 +396,7 @@ def batch_job():
     # tasks[cf.ind2]()
 
 if __name__ == '__main__':
-    args = parse_arguments()
+    # args = parse_arguments()
     mkdir('data')
     mkdir('data/video')
     mkdir('dataset')
@@ -399,12 +409,12 @@ if __name__ == '__main__':
     # game = 'RoboschoolAnt-v1'
     # game = 'RoboschoolWalker2d-v1'
     # game = 'RoboschoolHalfCheetah-v1'
-    # game = 'RoboschoolHopper-v1'
+    game = 'RoboschoolHopper-v1'
     # game = 'RoboschoolHumanoid-v1'
     # game = 'RoboschoolHumanoidFlagrun-v1'
     # game = 'RoboschoolReacher-v1'
     # game = 'RoboschoolHumanoidFlagrunHarder-v1'
-    game = 'Roboschool' + args.game + '-v1'
+    # game = 'Roboschool' + args.game + '-v1'
 
     # visualize_diversity(game)
 

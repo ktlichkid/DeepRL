@@ -53,6 +53,7 @@ class BaseAgent:
 
     def evaluation_episodes(self):
         interval = self.config.evaluation_episodes_interval
+        eval_out_file = self.config.evalout
         if not interval or self.total_steps % interval:
             return
         rewards = []
@@ -60,8 +61,8 @@ class BaseAgent:
             rewards.append(self.deterministic_episode())
         self.config.logger.info('global step: %d, evaluation episode return: %f(%f)' % (self.total_steps,
             np.mean(rewards), np.std(rewards) / np.sqrt(len(rewards))))
-        with open("03_evaluation", 'a+') as f:
-            f.write(str(self.total_steps) + ' ' + str(np.mean(rewards)) + '\n')
+        with open(eval_out_file, 'a+') as f:
+            f.write(str(self.total_steps) + ' ' + str(np.mean(rewards)) + ' ' + str(np.std(rewards) / np.sqrt(len(rewards))) + '\n')
 
 
     def evaluate(self, steps=1):
