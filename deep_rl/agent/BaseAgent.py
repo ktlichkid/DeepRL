@@ -42,12 +42,16 @@ class BaseAgent:
         state = env.reset()
         total_rewards = 0
         self.info['initial_state'] = True
+        step_now = 0
         while True:
+            step_now += 1
             action = self.evaluation_action(state)
             self.info['initial_state'] = False
             state, reward, done, _ = env.step(action)
             total_rewards += reward
             if done:
+                break
+            if step_now >= 2000:
                 break
         return total_rewards
 

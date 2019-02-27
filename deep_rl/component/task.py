@@ -5,10 +5,11 @@
 #######################################################################
 from .atari_wrapper import *
 import multiprocessing as mp
-import sys
 from .bench import Monitor
 from ..utils import *
+from .continuous_cartpole import ContinuousCartPoleEnv
 import uuid
+import roboschool
 
 class BaseTask:
     def set_monitor(self, env, log_dir):
@@ -38,6 +39,23 @@ class ClassicalControl(BaseTask):
         self.action_dim = self.env.action_space.n
         self.state_dim = self.env.observation_space.shape[0]
         self.env = self.set_monitor(self.env, log_dir)
+
+# Added by kt Feb 25
+class AscentEnv(BaseTask):
+    def __init__(self, name='our_continuous_cartpole', log_dir=None):
+        BaseTask.__init__(self)
+        print("Cart pole starts \n")
+        self.name = name
+        self.env = ContinuousCartPoleEnv()
+        self.action_dim = self.env.action_space.shape[0]
+        self.state_dim = self.env.observation_space.shape[0]
+        # self.env = self.set_monitor(self.env, log_dir)
+
+    def step(self, action):
+        return BaseTask.step(self, np.clip(action, -1, 1))
+
+
+###########################
 
 class PixelAtari(BaseTask):
     def __init__(self, name, seed=0, log_dir=None,
@@ -97,7 +115,6 @@ class Box2DContinuous(BaseTask):
 
 class Roboschool(BaseTask):
     def __init__(self, name, log_dir=None):
-        import roboschool
         BaseTask.__init__(self)
         self.name = name
         self.env = gym.make(self.name)
@@ -110,7 +127,6 @@ class Roboschool(BaseTask):
 
 class Bullet(BaseTask):
     def __init__(self, name, log_dir=None):
-        import pybullet_envs
         BaseTask.__init__(self)
         self.name = name
         self.env = gym.make(name)

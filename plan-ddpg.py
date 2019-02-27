@@ -22,7 +22,7 @@ def ddpg_continuous(game, log_dir=None, **kwargs):
     config.add_argument(
         '--game',
         type=str,
-        default='Hopper',
+        default='InvertedPendulum',
         help='TODO3'
     )
     config.add_argument(
@@ -53,8 +53,8 @@ def ddpg_continuous(game, log_dir=None, **kwargs):
     if log_dir is None:
         log_dir = get_default_log_dir(kwargs['tag'])
 
-    # config.task_fn = lambda **kwargs: Roboschool(game, **kwargs)
-    config.task_fn = lambda **kwargs: AscentEnv(**kwargs)
+    config.task_fn = lambda **kwargs: Roboschool(game, **kwargs)
+    # config.task_fn = lambda **kwargs: AscentEnv(**kwargs)
 
     config.evaluation_env = config.task_fn(log_dir=log_dir)
 
@@ -72,7 +72,7 @@ def ddpg_continuous(game, log_dir=None, **kwargs):
     config.discount = 0.99
     config.reward_normalizer = RescaleNormalizer(kwargs['reward_scale'])
     config.random_process_fn = lambda action_dim: config.noise(size=(action_dim, ), std=config.std)
-    config.max_steps = 6e4
+    config.max_steps = 1e5
     config.evaluation_episodes_interval = int(1e3)
     config.evaluation_episodes = 10
     config.min_memory_size = 64
