@@ -1,6 +1,8 @@
 from deep_rl import *
 import json
 import argparse
+import torch
+import random
 
 
 # def parse_arguments():
@@ -15,6 +17,16 @@ import argparse
 #     )
 #     return parser.parse_args()
 
+def deterministic(seed):
+    # Set random seeds
+    print("Deterministic")
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+
 
 def ddpg_continuous(game, log_dir=None, **kwargs):
 
@@ -22,7 +34,7 @@ def ddpg_continuous(game, log_dir=None, **kwargs):
     config.add_argument(
         '--game',
         type=str,
-        default='InvertedPendulum',
+        default='Hopper',
         help='TODO3'
     )
     config.add_argument(
@@ -72,7 +84,7 @@ def ddpg_continuous(game, log_dir=None, **kwargs):
     config.discount = 0.99
     config.reward_normalizer = RescaleNormalizer(kwargs['reward_scale'])
     config.random_process_fn = lambda action_dim: config.noise(size=(action_dim, ), std=config.std)
-    config.max_steps = 1e5
+    config.max_steps = 1000000
     config.evaluation_episodes_interval = int(1e3)
     config.evaluation_episodes = 10
     config.min_memory_size = 64
@@ -398,6 +410,7 @@ def batch_job():
     # tasks[cf.ind2]()
 
 if __name__ == '__main__':
+    deterministic(700)
     # args = parse_arguments()
     mkdir('data')
     mkdir('data/video')

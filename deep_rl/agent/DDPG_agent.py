@@ -46,7 +46,6 @@ class DDPGAgent(BaseAgent):
         while True:
             self.evaluate()
             self.evaluation_episodes()
-
             action = self.network.predict(np.stack([state]), True).flatten()
             action += self.random_process.sample()
 
@@ -62,10 +61,9 @@ class DDPGAgent(BaseAgent):
             steps += 1
             state = next_state
 
-            if not deterministic and self.replay.size() >= config.min_memory_size:
+            if not deterministic and self.replay.size() >= 1:# config.min_memory_size:
                 experiences = self.replay.sample()
                 states, actions, rewards, next_states, terminals = experiences
-
                 phi_next = self.target_network.feature(next_states)
                 a_next = self.target_network.actor(phi_next)
                 q_next = self.target_network.critic(phi_next, a_next)
@@ -77,7 +75,6 @@ class DDPGAgent(BaseAgent):
                 phi = self.network.feature(states)
                 q = self.network.critic(phi, self.network.tensor(actions))
                 critic_loss = (q - q_next).pow(2).mul(0.5).sum(-1).mean()
-
                 self.network.zero_grad()
                 critic_loss.backward()
                 self.network.critic_opt.step()

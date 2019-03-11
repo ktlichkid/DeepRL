@@ -118,6 +118,7 @@ class Roboschool(BaseTask):
         BaseTask.__init__(self)
         self.name = name
         self.env = gym.make(self.name)
+        self.env.seed(700)
         self.action_dim = self.env.action_space.shape[0]
         self.state_dim = self.env.observation_space.shape[0]
         self.env = self.set_monitor(self.env, log_dir)

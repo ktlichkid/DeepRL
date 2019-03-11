@@ -29,6 +29,8 @@ class Replay:
         if batch_size is None:
             batch_size = self.batch_size
 
+        if batch_size > len(self.data):
+            batch_size = len(self.data)
         sampled_indices = [np.random.randint(0, len(self.data)) for _ in range(batch_size)]
         sampled_data = [self.data[ind] for ind in sampled_indices]
         batch_data = list(map(lambda x: np.asarray(x), zip(*sampled_data)))
