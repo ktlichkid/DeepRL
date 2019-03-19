@@ -44,8 +44,8 @@ class DDPGAgent(BaseAgent):
         steps = 0
         total_reward = 0.0
         while True:
-            self.evaluate()
-            self.evaluation_episodes()
+            # self.evaluate()
+            # self.evaluation_episodes()
             action = self.network.predict(np.stack([state]), True).flatten()
             action += self.random_process.sample()
 

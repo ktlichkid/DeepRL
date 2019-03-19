@@ -72,9 +72,9 @@ def ddpg_continuous(game, log_dir=None, **kwargs):
 
     config.network_fn = lambda state_dim, action_dim: DeterministicActorCriticNet(
         state_dim, action_dim,
-        actor_body=FCBody(state_dim, (400, 300), gate=config.gate),
+        actor_body=FCBody(state_dim, (4, 4), gate=config.gate),
         critic_body=TwoLayerFCBodyWithAction(
-            state_dim, action_dim, (400, 300), gate=config.gate),
+            state_dim, action_dim, (4, 4), gate=config.gate),
         actor_opt_fn=lambda params: torch.optim.Adam(params, lr=1e-4),
         critic_opt_fn=lambda params: torch.optim.Adam(
             params, lr=1e-3, weight_decay=config.q_l2_weight)
@@ -84,8 +84,8 @@ def ddpg_continuous(game, log_dir=None, **kwargs):
     config.discount = 0.99
     config.reward_normalizer = RescaleNormalizer(kwargs['reward_scale'])
     config.random_process_fn = lambda action_dim: config.noise(size=(action_dim, ), std=config.std)
-    config.max_steps = 1000000
-    config.evaluation_episodes_interval = int(1e3)
+    config.max_steps = 1000
+    config.evaluation_episodes_interval = None # int(1e3)
     config.evaluation_episodes = 10
     config.min_memory_size = 64
     config.target_network_mix = 1e-3
