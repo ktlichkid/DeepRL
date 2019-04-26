@@ -202,7 +202,7 @@ def a2c_pixel_atari(name):
     config.entropy_weight = 0.01
     config.rollout_length = 5
     config.gradient_clip = 5
-    config.max_steps = int(2e7)
+    config.max_steps = 10000 # int(2e7)
     config.logger = get_logger(tag=a2c_pixel_atari.__name__)
     run_steps(A2CAgent(config))
 
@@ -440,6 +440,7 @@ if __name__ == '__main__':
     random_seed()
     select_device(-1)
     # select_device(0)
+    # game = "RoboschoolHopper-v1"
 
     # dqn_cart_pole()
     # quantile_regression_dqn_cart_pole()
@@ -449,14 +450,14 @@ if __name__ == '__main__':
     # n_step_dqn_cart_pole()
     # option_critic_cart_pole()
     # ppo_cart_pole()
-    # ppo_continuous('HalfCheetah-v2')
+    # ppo_continuous(game)
     # ddpg_continuous('HalfCheetah-v2')
 
-    # game = 'BreakoutNoFrameskip-v4'
+    game = 'BreakoutNoFrameskip-v4'
     # dqn_pixel_atari(game)
     # quantile_regression_dqn_pixel_atari(game)
     # categorical_dqn_pixel_atari(game)
-    # a2c_pixel_atari(game)
+    a2c_pixel_atari(game)
     # n_step_dqn_pixel_atari(game)
     # option_ciritc_pixel_atari(game)
     # ppo_pixel_atari(game)
