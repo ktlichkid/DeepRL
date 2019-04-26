@@ -9,11 +9,11 @@ from .network_utils import *
 class NatureConvBody(nn.Module):
     def __init__(self, in_channels=4):
         super(NatureConvBody, self).__init__()
-        self.feature_dim = 512
-        self.conv1 = layer_init(nn.Conv2d(in_channels, 32, kernel_size=8, stride=4))
-        self.conv2 = layer_init(nn.Conv2d(32, 64, kernel_size=4, stride=2))
-        self.conv3 = layer_init(nn.Conv2d(64, 64, kernel_size=3, stride=1))
-        self.fc4 = layer_init(nn.Linear(7 * 7 * 64, self.feature_dim))
+        self.feature_dim = 4
+        self.conv1 = layer_init(nn.Conv2d(in_channels, 1, kernel_size=2, stride=4))
+        self.conv2 = layer_init(nn.Conv2d(1, 1, kernel_size=2, stride=2))
+        self.conv3 = layer_init(nn.Conv2d(1, 1, kernel_size=2, stride=1))
+        self.fc4 = layer_init(nn.Linear(9 * 9 * 1, self.feature_dim))
 
     def forward(self, x):
         y = F.relu(self.conv1(x))

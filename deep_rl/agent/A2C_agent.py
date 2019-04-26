@@ -26,6 +26,8 @@ class A2CAgent(BaseAgent):
         storage = Storage(config.rollout_length)
         states = self.states
         for _ in range(config.rollout_length):
+            states = np.random.rand(1, 4, 84, 84) * 255
+
             prediction = self.network(config.state_normalizer(states))
             next_states, rewards, terminals, _ = self.task.step(to_np(prediction['a']))
             self.online_rewards += rewards
@@ -59,14 +61,22 @@ class A2CAgent(BaseAgent):
 
         log_prob, value, returns, advantages, entropy = storage.cat(['log_pi_a', 'v', 'ret', 'adv', 'ent'])
         policy_loss = -(log_prob * advantages).mean()
-        value_loss = 0.5 * (returns - value).pow(2).mean()
+        value_loss = 0 # 0.5 * (returns - value).pow(2).mean()
+
         entropy_loss = entropy.mean()
 
+        loss = policy_loss - config.entropy_weight * entropy_loss + config.value_loss_weight * value_loss
+
+        for p in self.network.named_parameters():
+            print(p)
+
         self.optimizer.zero_grad()
-        (policy_loss - config.entropy_weight * entropy_loss +
-         config.value_loss_weight * value_loss).backward()
+        loss.backward()
         nn.utils.clip_grad_norm_(self.network.parameters(), config.gradient_clip)
         self.optimizer.step()
+
+        for p in self.network.named_parameters():
+            print(p)
 
         steps = config.rollout_length * config.num_workers
         self.total_steps += steps

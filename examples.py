@@ -5,6 +5,8 @@
 #######################################################################
 
 from deep_rl import *
+import random
+
 
 # DQN
 def dqn_cart_pole():
@@ -188,7 +190,7 @@ def a2c_cart_pole():
 def a2c_pixel_atari(name):
     config = Config()
     config.history_length = 4
-    config.num_workers = 16
+    config.num_workers = 1 # 16
     log_dir = log_dir=get_default_log_dir(a2c_pixel_atari.__name__)
     config.task_fn = lambda: Task(name, num_envs=config.num_workers, log_dir=log_dir)
     config.eval_env = Task(name, episode_life=False)
@@ -197,12 +199,12 @@ def a2c_pixel_atari(name):
     config.state_normalizer = ImageNormalizer()
     config.reward_normalizer = SignNormalizer()
     config.discount = 0.99
-    config.use_gae = True
+    config.use_gae = False # True
     config.gae_tau = 1.0
     config.entropy_weight = 0.01
     config.rollout_length = 5
     config.gradient_clip = 5
-    config.max_steps = 10000 # int(2e7)
+    config.max_steps = 1 # int(2e7)
     config.logger = get_logger(tag=a2c_pixel_atari.__name__)
     run_steps(A2CAgent(config))
 
@@ -433,11 +435,24 @@ def plot():
     plt.legend()
     plt.savefig('./images/breakout.png')
 
+
+def deterministic(seed):
+    # Set random seeds
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.set_printoptions(precision=10)
+
+
 if __name__ == '__main__':
     mkdir('log')
     mkdir('tf_log')
     set_one_thread()
-    random_seed()
+    # random_seed()
+    deterministic(1024)
     select_device(-1)
     # select_device(0)
     # game = "RoboschoolHopper-v1"

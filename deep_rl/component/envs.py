@@ -23,7 +23,7 @@ except ImportError:
 # adapted from https://github.com/ikostrikov/pytorch-a2c-ppo-acktr/blob/master/envs.py
 def make_env(env_id, seed, rank, log_dir, episode_life=True):
     def _thunk():
-        random_seed(seed)
+        # random_seed(seed)
         if env_id.startswith("dm"):
             import dm_control2gym
             _, domain, task = env_id.split('-')
@@ -171,7 +171,7 @@ class Task:
                  single_process=True,
                  log_dir=None,
                  episode_life=True,
-                 seed=np.random.randint(int(1e5))):
+                 seed=1024):
         if log_dir is not None:
             mkdir(log_dir)
         envs = [make_env(name, seed, i, log_dir, episode_life) for i in range(num_envs)]
